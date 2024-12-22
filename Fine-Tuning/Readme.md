@@ -70,24 +70,4 @@ This project leverages Google Generative AI to create an interactive code assist
 
 ---
 
-### 🤝 Contributing
 
-Contributions are welcome! Please fork this repository and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
-
----
-
-### 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-### 📫 Contact
-
-- **Email:** [Your Email Address]
-- **LinkedIn:** [Your LinkedIn Profile](link)
-- **GitHub:** [Your GitHub Profile](link)
-
----
-
-Feel free to customize this template according to your needs! Happy coding! 🚀
