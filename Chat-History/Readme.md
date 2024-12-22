@@ -14,20 +14,14 @@ This project implements a Generative AI model to create an interactive chatbot t
 
 ### Installation
 
-1. **Clone the Repository:**
 
-    ```bash
-    git clone [Your_Repository_URL]
-    cd [Repository_Name]
-    ```
-
-2. **Install Dependencies:**
+1. **Install Dependencies:**
 
     ```bash
     npm install @google/generative-ai readline
     ```
 
-3. **Configure API Key:**
+2. **Configure API Key:**
 
     Ensure you have a valid Google Generative AI API key and configure it in your script.
 

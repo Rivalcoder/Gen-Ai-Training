@@ -11,14 +11,8 @@ This project uses a Generative AI model to create an interactive chatbot that co
 
 ### Installation
 
-1. **Clone the Repository:**
 
-    ```bash
-    git clone [Your_Repository_URL]
-    cd [Repository_Name]
-    ```
-
-2. **Install Dependencies for Python:**
+1. **Install Dependencies for Python:**
 
     ```bash
     pip install google-generativeai mysql-connector-python
@@ -30,11 +24,11 @@ This project uses a Generative AI model to create an interactive chatbot that co
     npm install @google/generative-ai mysql2
     ```
 
-3. **Configure API Key:**
+2. **Configure API Key:**
 
     Ensure you have a valid Google Generative AI API key and configure it in your script.
 
-4. **Setup MySQL Database:**
+3. **Setup MySQL Database:**
 
     - Ensure your MySQL database is running and has a `menu` table with items.
     - Update the database connection details in the scripts.

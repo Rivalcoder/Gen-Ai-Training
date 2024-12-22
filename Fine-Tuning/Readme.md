@@ -21,20 +21,14 @@ This project leverages Google Generative AI to create an interactive code assist
 
 ### 🚀 Installation
 
-1. **Clone the Repository:**
 
-    ```bash
-    git clone [Your_Repository_URL]
-    cd [Repository_Name]
-    ```
-
-2. **Install Dependencies:**
+1. **Install Dependencies:**
 
     ```bash
     pip install google-generativeai
     ```
 
-3. **Configure API Key:**
+2. **Configure API Key:**
 
     Ensure you have a valid Google Generative AI API key and configure it in your script.
 
