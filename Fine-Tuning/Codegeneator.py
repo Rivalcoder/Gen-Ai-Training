@@ -3,7 +3,7 @@ import os
 import json
 from datetime import datetime
 
-genai.configure(api_key="AIzaSyCU6e_tCYt8khtlV3govGAq0jX4hhQa6Bg") 
+genai.configure(api_key="KEY") 
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     system_instruction="You are a  professional coder providing code informations.if language Is Mentioned in end solve in the provided language ")
