@@ -1,44 +1,69 @@
 import { google } from '@ai-sdk/google';
-import { generateText } from 'ai';
+import { generateText, tool } from 'ai';
 import dotenv from 'dotenv';
+import { z } from 'zod';
+import Airtable from 'airtable';
 
-dotenv.config({ path: '.env.local' });
+dotenv.config({ path: '.env' });
 
-async function textGenerationTool({ prompt, modelName, apiKey }) {
+// Setup Airtable client
+const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+
+async function Storeintable(Title, Description) {
   try {
-    console.log('Invoking Text Generation Tool...');
-    const result = await generateText({
-      model: google(modelName),
-      prompt: prompt,
-      apiKey: apiKey,
+    const record = await base('Appointments').create({
+      'Title': Title,
+      'Description': Description || '',
+      'Start Time': new Date().toISOString(),
+      'End Time': new Date().toISOString()
     });
-    return result.text;
-  } catch (error) {
-    throw new Error(`Text Generation Tool Error: ${error.message}`);
+
+    return {
+      success: true,
+      message: `Data stored in Airtable with ID: ${record.id}`
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: `Failed to store data: ${err.message}`
+    };
   }
 }
+
+const tools = {
+  Storeintable: tool({
+    description: "Store data in Airtable",
+    parameters: z.object({ 
+      Title: z.string().describe("The title of the record"),
+      Description: z.string().describe("The description of the record")
+    }),
+    execute: async ({ Title, Description }) => Storeintable(Title, Description),
+  }),
+};
 
 async function run() {
   const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
   if (!apiKey) {
-    console.error('API Key is missing! Please check your .env.local file.');
+    console.error('API Key is missing! Please check your .env file.');
     return;
   }
 
-  const toolInput = {
-    prompt: 'Create a roadmap for Generative AI development with key milestones.',
-    modelName: 'gemini-1.5-pro-latest',
-    apiKey: apiKey,
-  };
-
   try {
-    const generatedText = await textGenerationTool(toolInput);
-    console.log('Generated Text:\n', generatedText);
+    console.log('Invoking Text Generation Tool...');
+    
+    const result = await generateText({
+      model: google('gemini-1.5-pro-latest'),
+      prompt: `By using the tools, store the data in the table from the User Input Given Title and Description 
+               Title:Learn Deepseek
+               Description:Learn Deepseek from the scratch`,
+      tools: tools,
+    });
+
+    console.log(result.text);
   } catch (error) {
-    console.error(error.message);
+    throw new Error(`Text Generation Tool Error: ${error.message}`);
   }
 }
 
-// Run the program
 run();
