@@ -136,9 +136,14 @@ async function run() {
     
   } catch (error) {
     console.error("Error:", error.message);
-  } finally {
-    rl.close();
+  } 
+}
+
+
+async function mainLoop() {
+  while (true) {
+    await run();
   }
 }
 
-run();
+mainLoop();
