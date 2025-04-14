@@ -44,7 +44,6 @@ async function Fetchdatafromtable(Title) {
     const records = await base('Appointments')
       .select({})
       .all();
-    // console.log(Title,records);
     if (records.length === 0) {
       return {
         success: true,
@@ -92,7 +91,24 @@ const tools = {
   })
 };
 
-async function run() {
+// Initialize conversation history
+const messages = [
+  {
+    role: "system",
+    content: `You are a task management assistant. Your job is to help users manage their tasks and appointments.      
+
+    Based on the user's input, you need to:
+    1. If the user provides a task and description, use Storeintable to save it
+    2. If the user asks about existing tasks or appointments, use Fetchdatafromtable to retrieve them
+    
+    Provide a natural, conversational response that:
+    - Confirms the action taken
+    - Shares the relevant information
+    - Acknowledges the user's request`
+  }
+];
+
+async function mainLoop() {
   const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
   if (!apiKey) {
@@ -100,50 +116,47 @@ async function run() {
     return;
   }
 
-  try {
-    const userInput = await getUserInput('Enter your input: ');
-
-    console.log('Processing your request...');
-    
-    const result = await generateText({
-      model: google('gemini-1.5-pro-latest'),
-      system: `You are a task management assistant. Your job is to help users manage their tasks and appointments.      
-
-      Based on the user's input, you need to:
-      1. If the user provides a task and description, use Storeintable to save it
-      2. If the user asks about existing tasks or appointments, use Fetchdatafromtable to retrieve them
-      Analyze the input and:
-      - If it contains a task to be saved, use Storeintable
-      - If it's a query about existing tasks, use Fetchdatafromtable
-      
-      Provide a natural, conversational response that:
-      - Confirms the action taken
-      - Shares the relevant information
-      - Acknowledges the user's request`,
-      prompt: `User Input: "${userInput}"
-                Based on the user's input, you need to:
-                1. If the user provides a task and description, use Storeintable to save it
-                2. If the user asks about existing tasks or appointments, use Fetchdatafromtable to retrieve them
-                
-
-                -After this You need to Give Response Text about what You have Done 
-            `,
-      tools: tools,
-      temperature:0.7,
-      maxSteps:2,
-    });
-    console.log("Result",result.text);
-    
-  } catch (error) {
-    console.error("Error:", error.message);
-  } 
-}
-
-
-async function mainLoop() {
   while (true) {
-    await run();
+    try {
+      const userInput = await getUserInput('Enter your input: ');
+      
+      // Add user message to history
+      messages.push({
+        role: "user",
+        content: userInput
+      });
+      
+      console.log('Processing your request...');
+      
+      const result = await generateText({
+        model: google('gemini-1.5-pro-latest'),
+        messages: messages, // Use the message history instead of prompt
+        tools: tools,
+        temperature: 0.7,
+        maxSteps: 2,
+      });
+      
+      console.log("Assistant:", result.text);
+      
+      // Add assistant response to history
+      messages.push({
+        role: "assistant",
+        content: result.text
+      });
+      
+      // Add any tool messages to history
+      if (result.response && result.response.messages) {
+        // Filter out messages that are already in the history
+        const newMessages = result.response.messages.filter(
+          msg => msg.role !== "user" && msg.role !== "system"
+        );
+        messages.push(...newMessages);
+      }
+      
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
   }
 }
 
-mainLoop();
+mainLoop();   
