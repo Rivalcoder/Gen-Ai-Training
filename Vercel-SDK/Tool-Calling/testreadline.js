@@ -44,7 +44,7 @@ async function Fetchdatafromtable(Title) {
     const records = await base('Appointments')
       .select({})
       .all();
-    console.log(Title,records);
+    // console.log(Title,records);
     if (records.length === 0) {
       return {
         success: true,
@@ -129,23 +129,11 @@ async function run() {
                 -After this You need to Give Response Text about what You have Done 
             `,
       tools: tools,
+      temperature:0.7,
+      maxSteps:2,
     });
-    console.log("Result",result);
-    if (result.toolCalls && result.toolCalls.length > 0) {
-      const toolCall = result.toolCalls[0];
-      const toolResult = await toolCall.execute();
-      
-      if (toolCall.name === 'Storeintable') {
-        console.log(`I've saved your task "${toolCall.parameters.Title}"`);
-        if (toolCall.parameters.Description) {
-          console.log(`Description: ${toolCall.parameters.Description}`);
-        }
-      } else if (toolCall.name === 'Fetchdatafromtable') {
-        console.log(toolResult.message);
-      }
-    } else {
-      console.log(result.text);
-    }
+    console.log("Result",result.text);
+    
   } catch (error) {
     console.error("Error:", error.message);
   } finally {
