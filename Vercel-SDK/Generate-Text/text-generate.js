@@ -10,14 +10,13 @@ async function run() {
   try {
     console.log('Started Generating Text...');
     const result = await generateText({
-      model: google('gemini-1.5-pro-latest'),
+      model: google('gemini-1.5-flash'),
       prompt: 'Write a Generative ai and its Roadmap',
       apiKey: apiKey
     });
 
     const text = result.text;
-    console.log(text);
-    
+     console.log(text);    
   } catch (error) {
     console.error('Error in Text Generation:', error);
   }

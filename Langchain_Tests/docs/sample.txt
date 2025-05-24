@@ -1,0 +1,10 @@
+LangChain is an open-source framework that helps developers build applications powered by large language models (LLMs). It provides tools to connect language models with external data sources such as text files, databases, APIs, and more.
+
+With LangChain, developers can create intelligent agents that can reason, retrieve relevant documents, and perform actions using tools like calculators, web browsers, or Python code execution.
+
+One of the most powerful features of LangChain is Retrieval-Augmented Generation (RAG). In this method, documents are split into smaller chunks, embedded using a model, and stored in a vector database. When a user asks a question, the most relevant chunks are retrieved and passed to the LLM for answering.
+
+LangChain also supports conversational memory, allowing chatbots to remember previous user interactions and carry context across messages.
+
+In short, LangChain enables advanced AI workflows by combining reasoning, tool use, data retrieval, and conversation memory—all in one platform.
+
